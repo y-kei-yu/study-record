@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getAllRecords } from "../utils/supabaseFunction";
+import {
+  addRecord,
+  deleteRecord,
+  getAllRecords,
+} from "../utils/supabaseFunction";
 
 export default function App() {
   const [records, setRecords] = useState([]);
@@ -12,46 +16,50 @@ export default function App() {
   const onChangeTitle = (event) => setTitle(event.target.value);
   const onChangeTime = (event) => setTime(Number(event.target.value));
 
-  useEffect(() => {
-    const getRecords = async () => {
-      try {
-        setIsLoading(true);
-        const allRecords = await getAllRecords();
-        console.log("supabase", allRecords);
-        setRecords(allRecords);
+  const getRecords = async () => {
+    try {
+      setIsLoading(true);
+      const allRecords = await getAllRecords();
+      console.log("supabase", allRecords);
+      setRecords(allRecords);
 
-        const initialTotalTime = allRecords.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.time,
-          0
-        );
-        setTotalTime(initialTotalTime);
-      } catch (error) {
-        console.log("エラー", error);
-        setError("エラー発生");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      const initialTotalTime = allRecords.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.time,
+        0
+      );
+      setTotalTime(initialTotalTime);
+    } catch (error) {
+      console.log("エラー", error);
+      setError("エラー発生");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  //画面初期表示
+  useEffect(() => {
     getRecords();
   }, []);
 
-  const onClickAdd = () => {
+  const onClickAdd = async () => {
     if (title.trim() === "" || time <= 0 || time === "") {
       setError("入力されていない項目があります");
       return;
     }
-    const newRecords = [...records, { title, time }];
-    setRecords(newRecords);
+    //登録データを追加
+    await addRecord(title, time);
 
-    const newTotalTime = newRecords.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.time,
-      0
-    );
-    setTotalTime(newTotalTime);
+    getRecords();
 
+    //初期化
     setTitle("");
     setTime("");
     setError("");
+  };
+
+  const onClickDelete = async (id) => {
+    await deleteRecord(id);
+    getRecords();
   };
 
   return (
@@ -73,12 +81,14 @@ export default function App() {
           <div>入力されている学習内容：{title}</div>
           <div>入力されている時間：{time}時間</div>
           <button onClick={onClickAdd}>登録</button>
+
           {error && <div style={{ color: "red" }}>{error}</div>}
 
           <div>
             {records.map((record, index) => (
               <div key={index}>
                 {record.title} {record.time}時間
+                <button onClick={() => onClickDelete(record.id)}>削除</button>
               </div>
             ))}
           </div>
