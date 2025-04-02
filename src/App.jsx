@@ -16,6 +16,7 @@ export default function App() {
   const onChangeTitle = (event) => setTitle(event.target.value);
   const onChangeTime = (event) => setTime(Number(event.target.value));
 
+  //データ取得
   const getRecords = async () => {
     try {
       setIsLoading(true);
@@ -49,6 +50,7 @@ export default function App() {
     //登録データを追加
     await addRecord(title, time);
 
+    //データ取得
     getRecords();
 
     //初期化
