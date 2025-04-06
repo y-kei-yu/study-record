@@ -70,7 +70,7 @@ export default function App() {
         <h1>ロード中</h1>
       ) : (
         <div className="App">
-          <h1>学習記録一覧</h1>
+          <h1>学習記録一覧アプリ</h1>
           <div>
             学習内容
             <input type="text" value={title} onChange={onChangeTitle} />
