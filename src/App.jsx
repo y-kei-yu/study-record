@@ -21,7 +21,7 @@ export default function App() {
     try {
       setIsLoading(true);
       const allRecords = await getAllRecords();
-      console.log("supabase", allRecords);
+      //console.log("supabase", allRecords);
       setRecords(allRecords);
 
       const initialTotalTime = allRecords.reduce(
@@ -70,14 +70,24 @@ export default function App() {
         <h1>ロード中</h1>
       ) : (
         <div className="App">
-          <h1>学習記録一覧アプリ</h1>
+          <h1 data-testid="title">学習記録一覧アプリ</h1>
           <div>
             学習内容
-            <input type="text" value={title} onChange={onChangeTitle} />
+            <input
+              data-testid="studyContent"
+              type="text"
+              value={title}
+              onChange={onChangeTitle}
+            />
           </div>
           <div>
             学習時間
-            <input type="number" value={time} onChange={onChangeTime} />
+            <input
+              data-testid="studyTime"
+              type="number"
+              value={time}
+              onChange={onChangeTime}
+            />
             時間
           </div>
           <div>入力されている学習内容：{title}</div>
@@ -88,7 +98,7 @@ export default function App() {
 
           <div>
             {records.map((record, index) => (
-              <div key={index}>
+              <div key={index} data-testid="list">
                 {record.title} {record.time}時間
                 <button onClick={() => onClickDelete(record.id)}>削除</button>
               </div>
