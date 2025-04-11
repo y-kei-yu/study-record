@@ -76,3 +76,31 @@ describe("データ削除テスト", () => {
     });
   });
 });
+
+describe("未入力テスト", () => {
+  it("入力をしないで登録を押すとエラーが表示されること", async () => {
+    render(<App />);
+
+    //useEventをセットアップ
+    const user = userEvent.setup();
+
+    await waitFor(() => {
+      expect(screen.queryByText("ロード中")).not.toBeInTheDocument();
+    });
+
+    //学習内容入力
+    await user.clear(screen.getByTestId("studyContent"));
+
+    //学習時間入力
+    await user.clear(screen.getByTestId("studyTime"));
+
+    //登録ボタン押下
+    const registerButton = screen.getByRole("button", { name: "登録" });
+    await user.click(registerButton);
+
+    await waitFor(() => {
+      const error = screen.getByTestId("errorMessage");
+      expect(error).toBeInTheDocument();
+    });
+  });
+});

@@ -94,7 +94,11 @@ export default function App() {
           <div>入力されている時間：{time}時間</div>
           <button onClick={onClickAdd}>登録</button>
 
-          {error && <div style={{ color: "red" }}>{error}</div>}
+          {error && (
+            <div data-testid="errorMessage" style={{ color: "red" }}>
+              {error}
+            </div>
+          )}
 
           <div>
             {records.map((record, index) => (
