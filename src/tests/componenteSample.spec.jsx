@@ -1,4 +1,11 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import {
+  getByLabelText,
+  getByRole,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import App from "../App";
 import React from "react";
 import "@testing-library/jest-dom";
@@ -25,12 +32,12 @@ describe("データ追加テスト", () => {
     const beforeListCount = beforeList.length;
 
     //学習内容入力
-    await user.type(screen.getByTestId("studyContent"), "test99");
+    await user.type(screen.getByTestId("studyContent"), "自動テスト");
 
     //学習時間入力
     await user.type(screen.getByTestId("studyTime"), "5");
 
-    //登録ボタン入力
+    //登録ボタン押下
     const registerButton = screen.getByRole("button", { name: "登録" });
     await user.click(registerButton);
 
@@ -39,6 +46,33 @@ describe("データ追加テスト", () => {
       const afterList = screen.getAllByTestId("list");
       const afterListCount = afterList.length;
       expect(afterListCount).toBe(beforeListCount + 1);
+    });
+  });
+});
+
+describe("データ削除テスト", () => {
+  it("削除ボタンを押すと学習記録が削除されて数が1つ減っていること", async () => {
+    render(<App />);
+
+    //useEventをセットアップ
+    const user = userEvent.setup();
+
+    //初期表示データのデータ件数
+    const beforeList = await screen.findAllByTestId("list");
+    const beforeListCount = beforeList.length;
+
+    //最後のリスト項目を取得し、その中から削除ボタンを見つける
+    const lastListItem = beforeList[beforeList.length - 1];
+    const deleteButton = within(lastListItem).getByRole("button", {
+      name: "削除",
+    });
+    await user.click(deleteButton);
+
+    //リストが更新されるのを待つ
+    await waitFor(() => {
+      const afterList = screen.getAllByTestId("list");
+      const afterListCount = afterList.length;
+      expect(afterListCount).toBe(beforeListCount - 1);
     });
   });
 });
