@@ -15,11 +15,11 @@ import userEvent from "@testing-library/user-event";
 jest.setTimeout(10000);
 
 describe("Title Test", () => {
-  it("タイトルが学習記録一覧アプリであること", async () => {
+  it("タイトルが学習記録アプリであること", async () => {
     //testId(title)を指定して取得
     render(<App />);
     const title = await screen.findByTestId("title");
-    expect(title).toHaveTextContent("学習記録一覧アプリ");
+    expect(title).toHaveTextContent("学習記録アプリ");
   });
 });
 
