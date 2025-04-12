@@ -11,9 +11,6 @@ import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 
-// 全体タイムアウト延長
-jest.setTimeout(20000);
-
 describe("Title Test", () => {
   it("タイトルが学習記録アプリであること", async () => {
     //testId(title)を指定して取得
@@ -45,11 +42,14 @@ describe("データ追加テスト", () => {
     await user.click(registerButton);
 
     //リストが更新されるのを待つ
-    await waitFor(() => {
-      const afterList = screen.getAllByTestId("list");
-      const afterListCount = afterList.length;
-      expect(afterListCount).toBe(beforeListCount + 1);
-    });
+    await waitFor(
+      () => {
+        const afterList = screen.getAllByTestId("list");
+        const afterListCount = afterList.length;
+        expect(afterListCount).toBe(beforeListCount + 1);
+      },
+      { timeout: 2000 }
+    );
   });
 });
 
@@ -72,11 +72,14 @@ describe("データ削除テスト", () => {
     await user.click(deleteButton);
 
     //リストが更新されるのを待つ
-    await waitFor(() => {
-      const afterList = screen.getAllByTestId("list");
-      const afterListCount = afterList.length;
-      expect(afterListCount).toBe(beforeListCount - 1);
-    });
+    await waitFor(
+      () => {
+        const afterList = screen.getAllByTestId("list");
+        const afterListCount = afterList.length;
+        expect(afterListCount).toBe(beforeListCount - 1);
+      },
+      { timeout: 2000 }
+    );
   });
 });
 
