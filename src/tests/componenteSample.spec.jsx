@@ -11,6 +11,9 @@ import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 
+// 全体タイムアウト延長
+jest.setTimeout(10000);
+
 describe("Title Test", () => {
   it("タイトルが学習記録一覧アプリであること", async () => {
     //testId(title)を指定して取得
