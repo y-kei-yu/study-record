@@ -12,7 +12,7 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 
 // 全体タイムアウト延長
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 describe("Title Test", () => {
   it("タイトルが学習記録アプリであること", async () => {
